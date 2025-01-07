@@ -23,7 +23,7 @@ export default [
     ignores: ['node_modules/*', 'dist/*'],
   },
   {
-    files: ['**/*.test.js'],
+    files: ['/src/tests/*'],
     languageOptions: {
       globals: {
         ...globals.jest,
