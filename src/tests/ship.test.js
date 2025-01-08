@@ -1,4 +1,4 @@
-import { Ship } from '../modules/ship';
+import { Ship } from '../modules/ship.js';
 
 let myShip;
 
