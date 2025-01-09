@@ -4,8 +4,8 @@
   "description": "Template repository for new projects that can be adjusted as needed.",
   "main": "index.js",
   "scripts": {
-    "build": "webpack --config webpack.prod.js",
-    "dev": "webpack serve --open --config webpack.dev.js",
+    "build": "webpack --config webpack.prod.cjs",
+    "dev": "webpack serve --open --config webpack.dev.cjs",
     "deploy": "git subtree push --prefix dist origin gh-pages",
     "lint": "eslint",
     "lint-fix": "eslint --fix",
