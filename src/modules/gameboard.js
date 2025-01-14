@@ -41,8 +41,7 @@ export class Gameboard {
   }
 
   checkSquare(x, y) {
-    const square = this.board[y][x];
-    return square.status();
+    return this.board[y][x].status();
   }
 
   receiveAttack(x, y) {
