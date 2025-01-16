@@ -1,5 +1,6 @@
 import './styles.css';
-import { DOMManager } from './modules/domManager.js';
+import { ContentLoader } from './modules/domManager.js';
 
-const userInterface = DOMManager();
-userInterface.initGameboards();
+const pageContainer = document.querySelector('.page-container');
+const contentLoader = ContentLoader();
+contentLoader.loadIngamePage(pageContainer);
