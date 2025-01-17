@@ -1,7 +1,7 @@
 export function ContentLoader() {
-  const loadPregamePage = () => {};
+  const initPregamePage = () => {};
 
-  const loadIngamePage = (pageContainer) => {
+  const initIngamePage = (pageContainer) => {
     const ingameContentContainer = pageContainer.querySelector('div');
     ingameContentContainer.classlist = 'ingame-content-container';
     ingameContentContainer.innerHTML = '';
@@ -170,8 +170,8 @@ export function ContentLoader() {
   // };
 
   return {
-    initPregamePage: loadPregamePage,
-    initIngamePage: loadIngamePage,
+    initPregamePage,
+    initIngamePage,
   };
 }
 
