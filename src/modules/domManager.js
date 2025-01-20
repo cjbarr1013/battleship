@@ -1,7 +1,7 @@
 export function ContentLoader() {
-  const initPregamePage = () => {};
+  const loadPregamePage = () => {};
 
-  const initIngamePage = (pageContainer) => {
+  const loadIngamePage = (pageContainer) => {
     const ingameContentContainer = pageContainer.querySelector('div');
     ingameContentContainer.classlist = 'ingame-content-container';
     ingameContentContainer.innerHTML = '';
@@ -143,6 +143,19 @@ export function ContentLoader() {
     return boardContainer.outerHTML;
   };
 
+  const createTempBoard = (id) => {
+    const boardContainer = document.querySelector('.board');
+
+    const yLabels = 'ABCDEFGHIJ';
+    for (let y = 0; y < yLabels.length; y++) {
+      for (let x = 1; x <= 10; x++) {
+        const square = document.createElement('div');
+        square.id = `${id}-${x},${yLabels[y]}`;
+        boardContainer.appendChild(square);
+      }
+    }
+  };
+
   const getIngameMsgHTML = () => {
     return `
       <p id="ingame-msg">It's your turn... fire away!</p>
@@ -170,26 +183,27 @@ export function ContentLoader() {
   // };
 
   return {
-    initPregamePage,
-    initIngamePage,
+    loadPregamePage,
+    loadIngamePage,
+    createTempBoard,
   };
 }
 
-export function GameplayDOMManager(gameContainer) {
-  const fillSquare = (status) => {
-    switch (status) {
-      case 'hit':
-        // apply hit class
-        break;
-      case 'miss':
-        // apply miss class
-        break;
-      case 'unharmed':
-        // apply unharmed class
-        break;
-      case 'empty':
-        // apply empty class
-        break;
-    }
-  };
-}
+// export function GameplayDOMManager(gameContainer) {
+//   const fillSquare = (status) => {
+//     switch (status) {
+//       case 'hit':
+//         // apply hit class
+//         break;
+//       case 'miss':
+//         // apply miss class
+//         break;
+//       case 'unharmed':
+//         // apply unharmed class
+//         break;
+//       case 'empty':
+//         // apply empty class
+//         break;
+//     }
+//   };
+// }

@@ -3,4 +3,5 @@ import { ContentLoader } from './modules/domManager.js';
 
 const pageContainer = document.querySelector('.page-container');
 const contentLoader = ContentLoader();
-contentLoader.loadIngamePage(pageContainer);
+contentLoader.createTempBoard();
+// contentLoader.loadIngamePage(pageContainer);
