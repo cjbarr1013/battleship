@@ -1,9 +1,30 @@
 export function ContentLoader() {
-  const loadPregamePage = () => {};
+  const loadPregamePage = (pageContainer) => {
+    pageContainer.classList = '';
+    pageContainer.classList.add('page-container', 'pregame-page-height');
+
+    const pregameContentContainer = pageContainer.querySelector('div');
+    pregameContentContainer.classList = 'pregame-content-container';
+    pregameContentContainer.innerHTML = '';
+
+    const pregameLeftContainer = document.createElement('div');
+    pregameLeftContainer.classList = 'pregame-left';
+
+    const pregameRightContainer = document.createElement('div');
+    pregameRightContainer.classList = 'pregame-right';
+
+    pregameLeftContainer.innerHTML += getPregameLeftHTML();
+    pregameRightContainer.innerHTML += getPregameRightHTML();
+
+    pregameContentContainer.appendChild(pregameLeftContainer);
+    pregameContentContainer.appendChild(pregameRightContainer);
+  };
 
   const loadIngamePage = (pageContainer) => {
+    pageContainer.classList = 'page-container';
+
     const ingameContentContainer = pageContainer.querySelector('div');
-    ingameContentContainer.classlist = 'ingame-content-container';
+    ingameContentContainer.classList = 'ingame-content-container';
     ingameContentContainer.innerHTML = '';
 
     const gameContainer = document.createElement('div');
@@ -17,6 +38,24 @@ export function ContentLoader() {
 
     ingameContentContainer.appendChild(gameContainer);
     ingameContentContainer.appendChild(msgContainer);
+  };
+
+  const getPregameLeftHTML = () => {
+    return `
+      <h2>Ready for Battle?</h2>
+      <p>Place your ships to get started.</p>
+      <button>Start Game</button>
+    `;
+  };
+
+  const getPregameRightHTML = () => {
+    const p1Container = document.createElement('div');
+    p1Container.classList = 'pregame-player-container';
+
+    p1Container.innerHTML = getPlayer1HTML();
+    p1Container.innerHTML += getPlaceShipNavHTML();
+
+    return p1Container.outerHTML;
   };
 
   const getPlayersHTML = () => {
@@ -47,8 +86,8 @@ export function ContentLoader() {
     let player1HTML = '';
 
     player1HTML += getPlayerInfoHTML('Player 1');
-    player1HTML += getPlayerShipsHTML();
     player1HTML += getPlayerBoardHTML('p1');
+    player1HTML += getPlayerShipsHTML();
 
     return player1HTML;
   };
@@ -89,7 +128,10 @@ export function ContentLoader() {
 
     return `
       <div class="ship ${shipName}">
-        <p>${shipName.charAt(0).toUpperCase() + shipName.slice(1)}</p>
+        <div class="ship-name">
+          <p>${shipName.charAt(0).toUpperCase() + shipName.slice(1)}</p>
+          <div></div>
+        </div>
         <div class="ship-blocks-container">
           ${shipBlocks}
         </div>
@@ -143,17 +185,14 @@ export function ContentLoader() {
     return boardContainer.outerHTML;
   };
 
-  const createTempBoard = (id) => {
-    const boardContainer = document.querySelector('.board');
-
-    const yLabels = 'ABCDEFGHIJ';
-    for (let y = 0; y < yLabels.length; y++) {
-      for (let x = 1; x <= 10; x++) {
-        const square = document.createElement('div');
-        square.id = `${id}-${x},${yLabels[y]}`;
-        boardContainer.appendChild(square);
-      }
-    }
+  const getPlaceShipNavHTML = () => {
+    return `
+      <div class="pregame-place-ship-nav">
+        <button>Rotate</button>
+        <button>Undo</button>
+        <button>Randomize</button>
+      </div>
+    `;
   };
 
   const getIngameMsgHTML = () => {
@@ -163,29 +202,9 @@ export function ContentLoader() {
     `;
   };
 
-  // const initGameboards = () => {
-  //   const player1Board = [document.querySelector('#player-1 .board'), 'p1'];
-  //   const player2Board = [document.querySelector('#player-2 .board'), 'p2'];
-  //   [player1Board, player2Board].forEach((board) => {
-  //     createGameboard(board);
-  //   });
-  // };
-
-  // const createGameboard = (boardInfo) => {
-  //   const yLabels = 'ABCDEFGHIJ';
-  //   for (let y = 0; y < yLabels.length; y++) {
-  //     for (let x = 1; x <= 10; x++) {
-  //       const square = document.createElement('div');
-  //       square.id = `${boardInfo[1]}-${x},${yLabels[y]}`;
-  //       boardInfo[0].appendChild(square);
-  //     }
-  //   }
-  // };
-
   return {
     loadPregamePage,
     loadIngamePage,
-    createTempBoard,
   };
 }
 
