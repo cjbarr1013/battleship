@@ -1,6 +1,45 @@
+@font-face {
+  font-family: 'quantico-regular';
+  src:
+    url('assets/fonts/quantico-regular-webfont.woff2') format('woff2'),
+    url('assets/fonts/quantico-regular-webfont.woff') format('woff');
+  font-weight: 400;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'quantico-bold';
+  src:
+    url('assets/fonts/quantico-bold-webfont.woff2') format('woff2'),
+    url('assets/fonts/quantico-bold-webfont.woff') format('woff');
+  font-weight: 700;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: 'quantico-italic';
+  src:
+    url('assets/fonts/quantico-italic-webfont.woff2') format('woff2'),
+    url('assets/fonts/quantico-italic-webfont.woff') format('woff');
+  font-weight: 400;
+  font-style: italic;
+}
+
+@font-face {
+  font-family: 'quantico-bold-italic';
+  src:
+    url('assets/fonts/quantico-bolditalic-webfont.woff2') format('woff2'),
+    url('assets/fonts/quantico-bolditalic-webfont.woff') format('woff');
+  font-weight: 700;
+  font-style: italic;
+}
+
 :root {
   --min-page-width: 906px;
   --board-font-size: 1rem;
+  --battleship-blue: rgb(3, 71, 189);
+  --battleship-red: rgb(200, 49, 49);
+  --battleship-gray: rgb(182, 200, 201);
 }
 
 *,
@@ -17,18 +56,8 @@ body {
 }
 
 html {
-  font-family:
-    system-ui,
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    Oxygen,
-    Ubuntu,
-    Cantarell,
-    'Open Sans',
-    'Helvetica Neue',
-    sans-serif;
+  font-family: quantico-regular, Roboto, sans-serif;
+  color: white;
   font-size: 16px;
   line-height: 1.15; /* Correct the line height in all browsers. */
   -webkit-text-size-adjust: 100%; /* Prevent adjustments of font size after orientation changes in iOS. */
@@ -37,10 +66,15 @@ html {
 body {
   margin: 0;
   min-width: var(--min-page-width);
+  background-color: var(--battleship-blue);
 }
 
 h1 {
-  font-size: 3rem;
+  font-size: 4rem;
+  background-color: white;
+  padding: 0.5rem 1rem 0 1rem;
+  border: 4px solid var(--battleship-blue);
+  border-radius: 1rem;
 }
 
 h2 {
@@ -49,6 +83,19 @@ h2 {
 
 p {
   margin: 0;
+}
+
+button {
+  padding: 5px 10px 1px 10px;
+  background-color: white;
+  border: 2px solid black;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+button:hover {
+  font-family: quantico-bold, sans-serif;
+  background-color: var(--battleship-gray);
 }
 
 button,
@@ -88,8 +135,31 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 1rem 0;
+  padding: 1rem 0 0.75rem 0;
+  font-family: quantico-bold;
+  -webkit-text-stroke: 3px var(--battleship-blue);
+  letter-spacing: 5px;
+  text-transform: uppercase;
   box-shadow: 0 0rem 0.5rem black;
+}
+
+.header-background {
+  --s: 4px; /* control the size*/
+  --c1: #0347bd;
+  --c2: #ffffff;
+
+  --_g: radial-gradient(calc(var(--s) / 2), var(--c1) 97%, #0000);
+  background:
+    var(--_g),
+    var(--_g) calc(2 * var(--s)) calc(2 * var(--s)),
+    repeating-conic-gradient(from 45deg, #0000 0 25%, var(--c2) 0 50%)
+      calc(-0.707 * var(--s)) calc(-0.707 * var(--s)),
+    repeating-linear-gradient(
+      135deg,
+      var(--c1) calc(var(--s) / -2) calc(var(--s) / 2),
+      var(--c2) 0 calc(2.328 * var(--s))
+    );
+  background-size: calc(4 * var(--s)) calc(4 * var(--s));
 }
 
 .pregame-content-container {
@@ -104,18 +174,29 @@ header {
   gap: 1rem;
   width: 100%;
   height: 100%;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
+}
+
+.pregame-left > h2 {
+  font-size: 3rem;
+}
+
+.pregame-left > p {
+  font-size: 1.5rem;
+}
+
+.pregame-left > button {
+  font-size: 1.5rem;
 }
 
 .pregame-right {
   width: 100%;
-  padding: 1rem;
+  padding: 1.5rem 1rem;
 }
 
 .ingame-content-container {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
   width: 100%;
 }
 
@@ -157,6 +238,8 @@ header {
   display: flex;
   justify-content: center;
   align-items: center;
+  padding-left: 1.5rem;
+  letter-spacing: 3px;
 }
 
 #player-2 > .player-info {
@@ -196,6 +279,20 @@ header {
   gap: 0.25rem;
 }
 
+.ship-name {
+  display: flex;
+  align-items: center;
+}
+
+.ship-active-indicator {
+  background: url(assets/icons/arrow-left-thin.svg) no-repeat center;
+  height: 1.5rem;
+  width: 1.5rem;
+  margin-left: 2px;
+  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(293deg)
+    brightness(104%) contrast(102%);
+}
+
 .ship-blocks-container {
   display: flex;
 }
@@ -203,6 +300,7 @@ header {
 .ship-block {
   width: 1.5vw;
   min-width: 1rem;
+  background-color: var(--battleship-gray);
   border: 0.05rem solid black;
   aspect-ratio: 1;
 }
@@ -266,6 +364,7 @@ header {
   display: grid;
   grid-template: repeat(10, 1fr) / repeat(10, 1fr);
   gap: 0;
+  background-color: white;
   border: solid 0.1rem black;
   aspect-ratio: 1;
 }
@@ -293,6 +392,12 @@ header {
   justify-content: center;
   gap: 1rem;
   padding-top: 1rem;
+  padding-left: 1.5rem;
+}
+
+.pregame-place-ship-nav > button {
+  width: 25%;
+  min-width: fit-content;
 }
 
 .msg-container {
@@ -301,6 +406,7 @@ header {
   justify-content: center;
   align-items: center;
   gap: 1rem;
+  padding: 1rem;
 }
 
 #ingame-msg {
