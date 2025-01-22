@@ -12,6 +12,15 @@ export class Gameboard {
         .fill()
         .map(() => new GameboardSquare());
     }
+
+    // Add IDs to squares
+    const yLabels = 'ABCDEFGHIJ';
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 10; x++) {
+        baseArr[y][x].id = `${x + 1},${yLabels[y]}`;
+      }
+    }
+
     return baseArr;
   }
 
@@ -65,6 +74,7 @@ export class GameboardSquare {
   constructor() {
     this.attacked = false;
     this.ship = null;
+    this.id = null;
   }
 
   status() {
