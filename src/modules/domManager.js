@@ -44,7 +44,7 @@ export function ContentLoader() {
     return `
       <h2>Ready for Battle?</h2>
       <p>Place your ships to get started.</p>
-      <button>Start Game</button>
+      <button id="start-game">Start Game</button>
     `;
   };
 
@@ -188,9 +188,9 @@ export function ContentLoader() {
   const getPlaceShipNavHTML = () => {
     return `
       <div class="pregame-place-ship-nav">
-        <button>Rotate</button>
-        <button>Undo</button>
-        <button>Randomize</button>
+        <button id="rotate">Rotate</button>
+        <button id="undo">Undo</button>
+        <button id="randomize">Randomize</button>
       </div>
     `;
   };
@@ -198,7 +198,7 @@ export function ContentLoader() {
   const getIngameMsgHTML = () => {
     return `
       <p id="ingame-msg">It's your turn... fire away!</p>
-      <button>New Game</button>
+      <button id="new-game">New Game</button>
     `;
   };
 
@@ -208,21 +208,67 @@ export function ContentLoader() {
   };
 }
 
-// export function GameplayDOMManager(gameContainer) {
-//   const fillSquare = (status) => {
-//     switch (status) {
-//       case 'hit':
-//         // apply hit class
-//         break;
-//       case 'miss':
-//         // apply miss class
-//         break;
-//       case 'unharmed':
-//         // apply unharmed class
-//         break;
-//       case 'empty':
-//         // apply empty class
-//         break;
-//     }
-//   };
-// }
+export function GameDOMManager() {
+  // Pre-game
+
+  // Apply ship-active-indicator class to ship currently being placed
+  const addActiveShipIndicator = (shipName) => {
+    removeAllActiveShipIndicators();
+    const shipContainer = document.querySelector(`.${shipName} > div > div`);
+    shipContainer.classList.add('ship-active-indicator');
+  };
+
+  const removeAllActiveShipIndicators = () => {
+    const allContainers = document.querySelectorAll('.ship-name > div');
+    allContainers.forEach((container) => (container.classList = ''));
+  };
+
+  // Change length of highlighted squares based on ship being placed
+
+  // Change orientation of highlighted squares based on ship being placed
+
+  const toggleStartGameDisabled = () => {
+    const btn = document.querySelector('#start-game');
+    btn.disabled = btn.disabled ? false : true;
+  };
+
+  const toggleNewGameDisabled = () => {
+    const btn = document.querySelector('#new-game');
+    btn.disabled = btn.disabled ? false : true;
+  };
+
+  const displayAllShips = (player) => {
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 10; x++) {
+        if (player.gameboard[y][x].ship) {
+          const square = document.querySelector(`#${player.id}-${x},${y}`);
+          square.classList.add('ship-present');
+        }
+      }
+    }
+  };
+
+  // const fillSquare = (status) => {
+  //   switch (status) {
+  //     case 'hit':
+  //       // apply hit class
+  //       break;
+  //     case 'miss':
+  //       // apply miss class
+  //       break;
+  //     case 'unharmed':
+  //       // apply unharmed class
+  //       break;
+  //     case 'empty':
+  //       // apply empty class
+  //       break;
+  //   }
+  // };
+
+  return {
+    addActiveShipIndicator,
+    toggleStartGameDisabled,
+    toggleNewGameDisabled,
+    displayAllShips,
+  };
+}
