@@ -24,7 +24,7 @@ describe('Gameboard', () => {
     });
 
     test('Invalid vertical', () => {
-      expect(gameboard.isShipPlacementValid(ship, [3, 5], false)).toBeFalsy();
+      expect(gameboard.isShipPlacementValid(ship, [3, 6], false)).toBeFalsy();
     });
 
     test('Only squares where ship is placed are truthy', () => {

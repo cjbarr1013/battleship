@@ -22,11 +22,24 @@ export class Gameboard {
   }
 
   isShipPlacementValid(ship, start, horizontal) {
+    // Check edges
     if (horizontal) {
       if (start[0] + (ship.length - 1) > 9) return false;
     } else {
       if (start[1] + (ship.length - 1) > 9) return false;
     }
+
+    // Check for other ships
+    if (horizontal) {
+      for (let i = 0; i < ship.length; i++) {
+        if (this.board[start[1]][start[0] + i].ship) return false;
+      }
+    } else {
+      for (let i = 0; i < ship.length; i++) {
+        if (this.board[start[1] + i][start[0]].ship) return false;
+      }
+    }
+
     return true;
   }
 
