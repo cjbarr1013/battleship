@@ -1,5 +1,99 @@
-export function ContentLoader() {
-  const loadPregamePage = (pageContainer) => {
+export function GameDOMManager() {
+  const contentLoader = ContentLoader();
+
+  const initPregamePage = () => {
+    contentLoader.loadPregameHTML();
+  };
+
+  const initIngamePage = () => {
+    contentLoader.loadIngameHTML();
+  };
+
+  // Apply ship-active-indicator class to ship currently being placed
+  const addActiveShipIndicator = (ship) => {
+    removeAllActiveShipIndicators();
+    const shipContainer = document.querySelector(`.${ship.name} > div > div`);
+    shipContainer.classList.add('ship-active-indicator');
+  };
+
+  const removeAllActiveShipIndicators = () => {
+    const allContainers = document.querySelectorAll('.ship-name > div');
+    allContainers.forEach((container) => (container.classList = ''));
+  };
+
+  // Change length of highlighted squares based on ship being placed
+  const showShipPlacementHighlight = (ship, horizontal, squareID, show) => {
+    let start = squareID.split('-')[1].split('');
+    start = start.map((item) => parseInt(item));
+
+    for (let i = 0; i < ship.length; i++) {
+      try {
+        const square = document.querySelector(`#p1-${start[0]}${start[1]}`);
+        if (show) square.classList.add('ship-placement-hover');
+        else square.classList.remove('ship-placement-hover');
+      } catch {
+        null;
+      }
+
+      if (horizontal) start[0] += 1;
+      else start[1] += 1;
+    }
+  };
+
+  const toggleStartGameDisabled = () => {
+    const btn = document.querySelector('#start-game');
+    btn.disabled = btn.disabled ? false : true;
+  };
+
+  const toggleNewGameDisabled = () => {
+    const btn = document.querySelector('#new-game');
+    btn.disabled = btn.disabled ? false : true;
+  };
+
+  const displayAllShips = (player) => {
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 10; x++) {
+        const square = document.querySelector(`#${player.id}-${x}${y}`);
+        square.classList.remove('ship-present');
+        if (player.gameboard.board[y][x].ship) {
+          square.classList.add('ship-present');
+        }
+      }
+    }
+  };
+
+  // const fillSquare = (status) => {
+  //   switch (status) {
+  //     case 'hit':
+  //       // apply hit class
+  //       break;
+  //     case 'miss':
+  //       // apply miss class
+  //       break;
+  //     case 'unharmed':
+  //       // apply unharmed class
+  //       break;
+  //     case 'empty':
+  //       // apply empty class
+  //       break;
+  //   }
+  // };
+
+  return {
+    initPregamePage,
+    initIngamePage,
+    addActiveShipIndicator,
+    showShipPlacementHighlight,
+    toggleStartGameDisabled,
+    toggleNewGameDisabled,
+    displayAllShips,
+  };
+}
+
+function ContentLoader() {
+  const pageContainer = document.querySelector('.page-container');
+
+  const loadPregameHTML = () => {
     pageContainer.classList = '';
     pageContainer.classList.add('page-container', 'pregame-page-height');
 
@@ -20,7 +114,7 @@ export function ContentLoader() {
     pregameContentContainer.appendChild(pregameRightContainer);
   };
 
-  const loadIngamePage = (pageContainer) => {
+  const loadIngameHTML = () => {
     pageContainer.classList = 'page-container';
 
     const ingameContentContainer = pageContainer.querySelector('div');
@@ -174,11 +268,10 @@ export function ContentLoader() {
     const boardContainer = document.createElement('div');
     boardContainer.classList = 'board';
 
-    const yLabels = 'ABCDEFGHIJ';
-    for (let y = 0; y < yLabels.length; y++) {
-      for (let x = 1; x <= 10; x++) {
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 10; x++) {
         const square = document.createElement('div');
-        square.id = `${id}-${x},${yLabels[y]}`;
+        square.id = `${id}-${x}${y}`;
         boardContainer.appendChild(square);
       }
     }
@@ -203,72 +296,7 @@ export function ContentLoader() {
   };
 
   return {
-    loadPregamePage,
-    loadIngamePage,
-  };
-}
-
-export function GameDOMManager() {
-  // Pre-game
-
-  // Apply ship-active-indicator class to ship currently being placed
-  const addActiveShipIndicator = (shipName) => {
-    removeAllActiveShipIndicators();
-    const shipContainer = document.querySelector(`.${shipName} > div > div`);
-    shipContainer.classList.add('ship-active-indicator');
-  };
-
-  const removeAllActiveShipIndicators = () => {
-    const allContainers = document.querySelectorAll('.ship-name > div');
-    allContainers.forEach((container) => (container.classList = ''));
-  };
-
-  // Change length of highlighted squares based on ship being placed
-
-  // Change orientation of highlighted squares based on ship being placed
-
-  const toggleStartGameDisabled = () => {
-    const btn = document.querySelector('#start-game');
-    btn.disabled = btn.disabled ? false : true;
-  };
-
-  const toggleNewGameDisabled = () => {
-    const btn = document.querySelector('#new-game');
-    btn.disabled = btn.disabled ? false : true;
-  };
-
-  const displayAllShips = (player) => {
-    for (let y = 0; y < 10; y++) {
-      for (let x = 0; x < 10; x++) {
-        if (player.gameboard[y][x].ship) {
-          const square = document.querySelector(`#${player.id}-${x},${y}`);
-          square.classList.add('ship-present');
-        }
-      }
-    }
-  };
-
-  // const fillSquare = (status) => {
-  //   switch (status) {
-  //     case 'hit':
-  //       // apply hit class
-  //       break;
-  //     case 'miss':
-  //       // apply miss class
-  //       break;
-  //     case 'unharmed':
-  //       // apply unharmed class
-  //       break;
-  //     case 'empty':
-  //       // apply empty class
-  //       break;
-  //   }
-  // };
-
-  return {
-    addActiveShipIndicator,
-    toggleStartGameDisabled,
-    toggleNewGameDisabled,
-    displayAllShips,
+    loadPregameHTML,
+    loadIngameHTML,
   };
 }
