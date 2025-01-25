@@ -3,30 +3,32 @@ import { Ship } from '../modules/ship.js';
 
 describe('Gameboard', () => {
   let gameboard;
+  let ship;
 
   beforeEach(() => {
     gameboard = new Gameboard();
+    ship = new Ship('carrier', 5);
   });
 
   describe('Ship placement', () => {
     test('Valid horizonal', () => {
-      expect(gameboard.isShipPlacementValid(5, [3, 2], true)).toBeTruthy();
+      expect(gameboard.isShipPlacementValid(ship, [3, 2], true)).toBeTruthy();
     });
 
     test('Valid vertical', () => {
-      expect(gameboard.isShipPlacementValid(5, [8, 3], false)).toBeTruthy();
+      expect(gameboard.isShipPlacementValid(ship, [8, 3], false)).toBeTruthy();
     });
 
     test('Invalid horizonal', () => {
-      expect(gameboard.isShipPlacementValid(5, [8, 2], true)).toBeFalsy();
+      expect(gameboard.isShipPlacementValid(ship, [8, 2], true)).toBeFalsy();
     });
 
     test('Invalid vertical', () => {
-      expect(gameboard.isShipPlacementValid(5, [3, 5], false)).toBeFalsy();
+      expect(gameboard.isShipPlacementValid(ship, [3, 5], false)).toBeFalsy();
     });
 
     test('Only squares where ship is placed are truthy', () => {
-      gameboard.placeShip('carrier', 5, [3, 2], true);
+      gameboard.placeShip(ship, [3, 2], true);
       for (let x = 0; x <= 9; x++) {
         for (let y = 0; y <= 9; y++) {
           if (y === 2 && [3, 4, 5, 6, 7].includes(x)) {
@@ -39,9 +41,19 @@ describe('Gameboard', () => {
     });
   });
 
+  test('Remove ship', () => {
+    gameboard.placeShip(ship, [3, 2], true);
+    gameboard.removeShip(ship);
+    for (let x = 0; x <= 9; x++) {
+      for (let y = 0; y <= 9; y++) {
+        expect(gameboard.board[y][x].ship).toBeFalsy();
+      }
+    }
+  });
+
   describe('Check squares', () => {
     beforeEach(() => {
-      gameboard.placeShip('carrier', 5, [3, 2], true);
+      gameboard.placeShip(ship, [3, 2], true);
     });
 
     test('Ship present and attacked', () => {
@@ -64,7 +76,7 @@ describe('Gameboard', () => {
   });
 
   test('Ship successfully hit', () => {
-    gameboard.placeShip('carrier', 5, [3, 2], true);
+    gameboard.placeShip(ship, [3, 2], true);
     gameboard.receiveAttack(5, 2);
     for (let i = 0; i < 5; i++) {
       expect(gameboard.board[2][3 + i].ship.timesHit).toBe(1);
@@ -73,7 +85,7 @@ describe('Gameboard', () => {
 
   describe('Check if all ships destroyed', () => {
     beforeEach(() => {
-      gameboard.placeShip('carrier', 5, [3, 2], true);
+      gameboard.placeShip(ship, [3, 2], true);
     });
 
     test('All destroyed', () => {

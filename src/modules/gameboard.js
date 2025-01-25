@@ -1,5 +1,3 @@
-import { Ship } from './ship.js';
-
 export class Gameboard {
   constructor() {
     this.board = this.#constructBoard();
@@ -14,37 +12,48 @@ export class Gameboard {
     }
 
     // Add IDs to squares
-    const yLabels = 'ABCDEFGHIJ';
     for (let y = 0; y < 10; y++) {
       for (let x = 0; x < 10; x++) {
-        baseArr[y][x].id = `${x + 1},${yLabels[y]}`;
+        baseArr[y][x].id = `${x}${y}`;
       }
     }
 
     return baseArr;
   }
 
-  isShipPlacementValid(length, start, horizontal) {
+  isShipPlacementValid(ship, start, horizontal) {
     if (horizontal) {
-      if (start[0] + length > 9) return false;
+      if (start[0] + (ship.length - 1) > 9) return false;
     } else {
-      if (start[1] + length > 9) return false;
+      if (start[1] + (ship.length - 1) > 9) return false;
     }
     return true;
   }
 
-  placeShip(name, length, start, horizontal = true) {
+  placeShip(ship, start, horizontal = true) {
     const x = start[0];
     const y = start[1];
-    const newShip = new Ship(name, length);
 
     if (horizontal) {
-      for (let i = 0; i < length; i++) {
-        this.board[y][x + i].ship = newShip;
+      for (let i = 0; i < ship.length; i++) {
+        this.board[y][x + i].ship = ship;
       }
     } else {
-      for (let i = 0; i < length; i++) {
-        this.board[y + i][x].ship = newShip;
+      for (let i = 0; i < ship.length; i++) {
+        this.board[y + i][x].ship = ship;
+      }
+    }
+  }
+
+  removeShip(ship) {
+    for (let y = 0; y < 10; y++) {
+      for (let x = 0; x < 10; x++) {
+        if (
+          this.board[y][x].ship !== null &&
+          this.board[y][x].ship.name === ship.name
+        ) {
+          this.board[y][x].ship = null;
+        }
       }
     }
   }
