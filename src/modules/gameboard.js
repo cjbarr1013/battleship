@@ -82,6 +82,16 @@ export class Gameboard {
     }
   }
 
+  isAttackValid(x, y) {
+    if (
+      this.checkSquare(x, y) === 'unharmed' ||
+      this.checkSquare(x, y) === 'empty'
+    ) {
+      return true;
+    }
+    return false;
+  }
+
   areAllShipsDestroyed() {
     for (let y = 0; y <= 9; y++) {
       for (let x = 0; x <= 9; x++) {

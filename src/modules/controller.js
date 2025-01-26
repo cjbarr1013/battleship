@@ -82,7 +82,7 @@ export function PregameController(domManager) {
     }
   });
 
-  // Button methods
+  // Methods
   function placeShip(squareID) {
     let start = squareID.split('-')[1].split('');
     start = start.map((item) => parseInt(item));
@@ -156,9 +156,12 @@ function IngameController(domManager, player1, computer) {
   // Initialize HTML
   domManager.initIngamePage();
   domManager.displayAllShips(player1);
-  domManager.displayAllShips(computer);
+  domManager.toggleNewGameDisabled();
 
-  // Initialize buttons
+  // Initialize gameplay objects and variables
+  let gameOver = false;
+
+  // Initialize event listeners
   const newGameBtn = document.querySelector('#new-game');
   const squares = document.querySelectorAll('.board > div');
 
@@ -166,7 +169,69 @@ function IngameController(domManager, player1, computer) {
     PregameController(domManager);
   });
 
-  squares.forEach(() => {});
+  squares.forEach((square) => {
+    square.addEventListener('click', (e) => {
+      manageAttackClick(e.target.id);
+    });
+  });
 
-  // Initialize gameplay objects and variables
+  // Methods
+
+  function manageAttackClick(squareID) {
+    if (!gameOver) {
+      let coordinates = squareID.split('-')[1].split('');
+      const x = coordinates[0];
+      const y = coordinates[1];
+
+      if (computer.gameboard.isAttackValid(x, y)) {
+        playerAttack(x, y);
+        if (!gameOver) {
+          computerAttack();
+        }
+      }
+    }
+  }
+
+  function playerAttack(x, y) {
+    computer.gameboard.receiveAttack(x, y);
+    const squareStatus = computer.gameboard.checkSquare(x, y);
+    domManager.showSquareStatus(squareStatus, computer, x, y);
+    checkGameStatus(computer);
+  }
+
+  const computerAttack = () => {
+    while (true) {
+      const x = Math.floor(Math.random() * 10);
+      const y = Math.floor(Math.random() * 10);
+
+      if (player1.gameboard.isAttackValid(x, y)) {
+        player1.gameboard.receiveAttack(x, y);
+        const squareStatus = player1.gameboard.checkSquare(x, y);
+        domManager.showSquareStatus(squareStatus, player1, x, y);
+        checkGameStatus(player1);
+        return;
+      }
+    }
+  };
+
+  function checkGameStatus(player) {
+    if (player.gameboard.areAllShipsDestroyed()) {
+      gameOver = true;
+      endGame();
+    }
+  }
+
+  function endGame() {
+    domManager.displayAllShips(computer);
+    domManager.toggleNewGameDisabled();
+  }
+
+  // Write event listener function that responds to board clicks
+  // to drive gameplay
+
+  // Write function that shows ship has been attacked on left/right
+  // hand side of screen (domManager)
+
+  // Write function that fills square with object that represents
+  // its' status (hit, miss, no attack) (domManager)
 }

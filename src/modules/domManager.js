@@ -62,22 +62,14 @@ export function GameDOMManager() {
     }
   };
 
-  // const fillSquare = (status) => {
-  //   switch (status) {
-  //     case 'hit':
-  //       // apply hit class
-  //       break;
-  //     case 'miss':
-  //       // apply miss class
-  //       break;
-  //     case 'unharmed':
-  //       // apply unharmed class
-  //       break;
-  //     case 'empty':
-  //       // apply empty class
-  //       break;
-  //   }
-  // };
+  const showSquareStatus = (status, player, x, y) => {
+    const square = document.querySelector(`#${player.id}-${x}${y}`);
+    if (status === 'hit') {
+      square.classList.add('attack-hit');
+    } else if (status === 'miss') {
+      square.classList.add('attack-miss');
+    }
+  };
 
   return {
     initPregamePage,
@@ -87,6 +79,7 @@ export function GameDOMManager() {
     toggleStartGameDisabled,
     toggleNewGameDisabled,
     displayAllShips,
+    showSquareStatus,
   };
 }
 
