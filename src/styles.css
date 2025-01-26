@@ -394,7 +394,8 @@ header {
   border-right: solid 0.05rem black;
 }
 
-.ship-placement-hover {
+.ship-placement-hover,
+.ingame-content-container #player-2 .board > div:hover {
   background-color: var(--battleship-gray-light);
 }
 
@@ -414,6 +415,14 @@ header {
 .pregame-place-ship-nav > button {
   width: 25%;
   min-width: fit-content;
+}
+
+.attack-hit {
+  content: url(assets/icons/close-thick.svg);
+}
+
+.attack-miss {
+  content: url(assets/icons/circle-small.svg);
 }
 
 .msg-container {
