@@ -62,12 +62,44 @@ export function GameDOMManager() {
     }
   };
 
-  const showSquareStatus = (status, player, x, y) => {
+  const showSquareStatus = (status, player, ship, x, y) => {
     const square = document.querySelector(`#${player.id}-${x}${y}`);
     if (status === 'hit') {
       square.classList.add('attack-hit');
+      const shipSquare = document.querySelector(
+        `#${player.id} .${ship.name} .ship-block:nth-of-type(${ship.timesHit})`
+      );
+      shipSquare.classList.add('attack-hit');
     } else if (status === 'miss') {
       square.classList.add('attack-miss');
+    }
+  };
+
+  const updatePregameMsg = (allShipsPlaced) => {
+    const msgContainer = document.querySelector('.pregame-left > p');
+    if (allShipsPlaced) {
+      msgContainer.textContent =
+        'Your ships are ready! Click below to enter battle!';
+    } else {
+      msgContainer.textContent = 'Place your ships to get started.';
+    }
+  };
+
+  const updateIngameMsg = (gameOver, receivingPlayer) => {
+    const msgContainer = document.querySelector('#ingame-msg');
+    if (!gameOver) {
+      if (receivingPlayer.id === 'p1') {
+        msgContainer.textContent = `It's your turn... fire away!`;
+      } else {
+        msgContainer.textContent = 'Awaiting attack from the computer...';
+      }
+    } else {
+      if (receivingPlayer.id === 'p1') {
+        msgContainer.textContent =
+          'You lost to the computer!? Better luck next time, moron.';
+      } else {
+        msgContainer.textContent = `Congrats, you beat the computer! Want to play again?`;
+      }
     }
   };
 
@@ -80,6 +112,8 @@ export function GameDOMManager() {
     toggleNewGameDisabled,
     displayAllShips,
     showSquareStatus,
+    updatePregameMsg,
+    updateIngameMsg,
   };
 }
 
@@ -148,12 +182,12 @@ function ContentLoader() {
   const getPlayersHTML = () => {
     const p2Container = document.createElement('div');
     p2Container.classList = 'player-container';
-    p2Container.id = 'player-2';
+    p2Container.id = 'p2';
     p2Container.innerHTML = getPlayer2HTML();
 
     const p1Container = document.createElement('div');
     p1Container.classList = 'player-container';
-    p1Container.id = 'player-1';
+    p1Container.id = 'p1';
     p1Container.innerHTML = getPlayer1HTML();
 
     return p2Container.outerHTML + p1Container.outerHTML;

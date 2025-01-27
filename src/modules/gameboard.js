@@ -100,6 +100,10 @@ export class Gameboard {
     }
     return true;
   }
+
+  getShip(x, y) {
+    return this.board[y][x].ship;
+  }
 }
 
 export class GameboardSquare {

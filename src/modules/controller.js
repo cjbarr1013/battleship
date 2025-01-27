@@ -9,20 +9,12 @@ export function PregameController(domManager) {
   const player1 = new Player('Player 1', 'p1');
   const computer = new Player('Computer', 'p2');
   let activePlayer = player1;
-
-  const ships = [
-    new Ship('carrier', 5),
-    new Ship('battleship', 4),
-    new Ship('cruiser', 3),
-    new Ship('submarine', 3),
-    new Ship('destroyer', 2),
-  ];
-
+  let ships = initShips();
   let activeShipIndex = 0;
   let activeShip = ships[activeShipIndex];
+  let horizontal = true;
   domManager.addActiveShipIndicator(activeShip);
   domManager.toggleStartGameDisabled();
-  let horizontal = true;
 
   // Initialize event listeners
   const startBtn = document.querySelector('#start-game');
@@ -83,6 +75,16 @@ export function PregameController(domManager) {
   });
 
   // Methods
+  function initShips() {
+    return [
+      new Ship('carrier', 5),
+      new Ship('battleship', 4),
+      new Ship('cruiser', 3),
+      new Ship('submarine', 3),
+      new Ship('destroyer', 2),
+    ];
+  }
+
   function placeShip(squareID) {
     let start = squareID.split('-')[1].split('');
     start = start.map((item) => parseInt(item));
@@ -118,6 +120,7 @@ export function PregameController(domManager) {
     } else {
       if (activePlayer.id === 'p1') {
         domManager.toggleStartGameDisabled();
+        domManager.updatePregameMsg(true);
       }
     }
   }
@@ -125,6 +128,7 @@ export function PregameController(domManager) {
   function previousShip() {
     if (activeShipIndex >= ships.length) {
       domManager.toggleStartGameDisabled();
+      domManager.updatePregameMsg(false);
     }
     activeShipIndex -= 1;
     activeShip = ships[activeShipIndex];
@@ -142,6 +146,7 @@ export function PregameController(domManager) {
   }
 
   function initComputerPlayer() {
+    ships = initShips();
     activePlayer = computer;
     activeShipIndex = 0;
     activeShip = ships[activeShipIndex];
@@ -160,6 +165,7 @@ function IngameController(domManager, player1, computer) {
 
   // Initialize gameplay objects and variables
   let gameOver = false;
+  let computerMakingTurn = false;
 
   // Initialize event listeners
   const newGameBtn = document.querySelector('#new-game');
@@ -176,9 +182,8 @@ function IngameController(domManager, player1, computer) {
   });
 
   // Methods
-
   function manageAttackClick(squareID) {
-    if (!gameOver) {
+    if (!gameOver && !computerMakingTurn) {
       let coordinates = squareID.split('-')[1].split('');
       const x = coordinates[0];
       const y = coordinates[1];
@@ -193,45 +198,44 @@ function IngameController(domManager, player1, computer) {
   }
 
   function playerAttack(x, y) {
-    computer.gameboard.receiveAttack(x, y);
-    const squareStatus = computer.gameboard.checkSquare(x, y);
-    domManager.showSquareStatus(squareStatus, computer, x, y);
-    checkGameStatus(computer);
+    attack(computer, x, y);
   }
 
-  const computerAttack = () => {
+  async function computerAttack() {
+    computerMakingTurn = true;
+    await new Promise((resolve) => setTimeout(resolve, 1000));
     while (true) {
       const x = Math.floor(Math.random() * 10);
       const y = Math.floor(Math.random() * 10);
 
       if (player1.gameboard.isAttackValid(x, y)) {
-        player1.gameboard.receiveAttack(x, y);
-        const squareStatus = player1.gameboard.checkSquare(x, y);
-        domManager.showSquareStatus(squareStatus, player1, x, y);
-        checkGameStatus(player1);
+        attack(player1, x, y);
+        computerMakingTurn = false;
         return;
       }
     }
-  };
+  }
+
+  function attack(player, x, y) {
+    player.gameboard.receiveAttack(x, y);
+    const squareStatus = player.gameboard.checkSquare(x, y);
+    const ship = player.gameboard.getShip(x, y);
+    domManager.showSquareStatus(squareStatus, player, ship, x, y);
+    checkGameStatus(player);
+  }
 
   function checkGameStatus(player) {
     if (player.gameboard.areAllShipsDestroyed()) {
       gameOver = true;
-      endGame();
+      endGame(player);
+    } else {
+      domManager.updateIngameMsg(false, player);
     }
   }
 
-  function endGame() {
+  function endGame(player) {
     domManager.displayAllShips(computer);
+    domManager.updateIngameMsg(true, player);
     domManager.toggleNewGameDisabled();
   }
-
-  // Write event listener function that responds to board clicks
-  // to drive gameplay
-
-  // Write function that shows ship has been attacked on left/right
-  // hand side of screen (domManager)
-
-  // Write function that fills square with object that represents
-  // its' status (hit, miss, no attack) (domManager)
 }

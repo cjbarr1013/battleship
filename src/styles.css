@@ -91,11 +91,15 @@ button {
   background-color: white;
   border: 2px solid black;
   border-radius: 8px;
-  cursor: pointer;
 }
 
-button:hover {
+button:disabled {
+  opacity: 0.3;
+}
+
+button:hover:enabled {
   background-color: var(--battleship-gray);
+  cursor: pointer;
 }
 
 button,
@@ -226,11 +230,11 @@ header {
   height: auto;
 }
 
-#player-2 {
+#p2 {
   grid-template: auto 1fr / 28% 1fr;
 }
 
-#player-1 {
+#p1 {
   grid-template: auto 1fr / 1fr 28%;
 }
 
@@ -243,12 +247,12 @@ header {
   letter-spacing: 3px;
 }
 
-#player-2 > .player-info {
+#p2 > .player-info {
   grid-column: 2 / 3;
 }
 
 .pregame-player-container > .player-info,
-#player-1 > .player-info {
+#p1 > .player-info {
   grid-column: 1 / 2;
 }
 
@@ -263,13 +267,13 @@ header {
   padding: 1rem;
 }
 
-#player-2 > .ships-container {
+#p2 > .ships-container {
   grid-column: 1 / 2;
   justify-self: end;
 }
 
 .pregame-player-container > .ships-container,
-#player-1 > .ships-container {
+#p1 > .ships-container {
   grid-column: 2 / 3;
   justify-self: start;
 }
@@ -323,12 +327,12 @@ header {
   aspect-ratio: 1;
 }
 
-#player-2 > .board-container {
+#p2 > .board-container {
   grid-column: 2 / 3;
 }
 
 .pregame-player-container > .board-container,
-#player-1 > .board-container {
+#p1 > .board-container {
   grid-column: 1 / 2;
 }
 
@@ -395,7 +399,7 @@ header {
 }
 
 .ship-placement-hover,
-.ingame-content-container #player-2 .board > div:hover {
+.ingame-content-container #p2 .board > div:hover {
   background-color: var(--battleship-gray-light);
 }
 
