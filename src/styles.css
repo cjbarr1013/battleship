@@ -301,8 +301,6 @@ header {
   height: 1.5rem;
   width: 1.5rem;
   margin-left: 2px;
-  filter: invert(100%) sepia(0%) saturate(0%) hue-rotate(293deg)
-    brightness(104%) contrast(102%);
 }
 
 .ship-blocks-container {
@@ -379,6 +377,7 @@ header {
   background-color: white;
   border: solid 0.1rem black;
   aspect-ratio: 1;
+  width: 100%;
 }
 
 .board > div {
@@ -388,6 +387,7 @@ header {
   font-size: var(--board-font-size);
   padding: 0.2rem;
   aspect-ratio: 1;
+  width: 100%;
 }
 
 .board > div:nth-child(n + 11) {
